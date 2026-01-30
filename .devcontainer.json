@@ -1,0 +1,90 @@
+{
+  "name": "Node.js 22 Bookworm",
+  
+  // Use the official Node.js 22 Bookworm image
+  "image": "node:22-bookworm",
+  
+  // Features to install
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "username": "node",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "22"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  
+  // Customizations for VS Code
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "github.vscode-github-actions",
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "prisma.prisma",
+        "graphql.vscode-graphql",
+        "orta.vscode-jest",
+        "ms-vscode.makefile-tools"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "javascript.updateImportsOnFileMove.enabled": "always",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000
+      }
+    }
+  },
+  
+  // Forward common ports
+  "forwardPorts": [3000, 3001, 8080, 5173, 4200, 5000],
+  
+  // Port attributes
+  "portsAttributes": {
+    "3000": {
+      "label": "Web Server",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Vite Dev Server",
+      "onAutoForward": "notify"
+    }
+  },
+  
+  // Post-create commands (runs after container is created)
+  "postCreateCommand": "npm install -g pnpm yarn && echo 'Node.js $(node --version)' && echo 'npm $(npm --version)' && echo 'pnpm $(pnpm --version || echo not installed)' && echo 'Ready to develop!'",
+  
+  // Remote user (node user comes with the image)
+  "remoteUser": "node",
+  
+  // Container environment variables
+  "containerEnv": {
+    "NODE_ENV": "development",
+    "TERM": "xterm-256color"
+  },
+  
+  // Optional: Mount Docker socket if you need Docker
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  
+  // Optional: Run arguments
+  "runArgs": ["--init"]
+}
